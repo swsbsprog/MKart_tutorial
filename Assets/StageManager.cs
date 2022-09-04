@@ -5,6 +5,7 @@ using TMPro;
 public class StageManager : MonoBehaviour
 {
     public TMP_Text countDownText;
+    public TMP_Text playTimeText;
     public int remainTime = 3;
     public AudioSource audioSource;
     public AudioClip countDownClip;
@@ -28,6 +29,8 @@ public class StageManager : MonoBehaviour
         countDownText.text = "Start!";
         kartMove.enabled = true;
         audioSource.PlayOneShot(startClip);
+        startTime = Time.time;
+        isStart = true;
         foreach (var light in trafficLight)
             light.material.color = trafficLightStartColor;
 
@@ -36,9 +39,18 @@ public class StageManager : MonoBehaviour
     }
 
     float nextEnableTime;
+    private float startTime;
+    public bool isStart; 
+
     private void Update()
     {
-        if (kartMove.enabled) return;
+        // 스타하고 난 다음 표시.
+        if(isStart)
+            playTimeText.text = (Time.time - startTime).ToString("F3"); //진행된 시간
+
+        // 스타트 하고 나면 아래로 진행 안됨.
+        if (isStart) return;
+
         if (nextEnableTime > Time.time) return;
 
         if (Input.GetAxis("Vertical") > 0)
