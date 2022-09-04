@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
+
 public class StageManager : MonoBehaviour
 {
     public TMP_Text countDownText;
@@ -58,5 +60,14 @@ public class StageManager : MonoBehaviour
             audioSource.PlayOneShot(earlyStartClip);
             nextEnableTime += 2;
         }
+    }
+
+
+    public HashSet<Collider> entered = new();
+    private void MyOnTriggerEnter(Tuple<Collider, string> param)
+    {
+        print($"충돌된 이벤트 전달 받음 :{param.Item1}{param.Item2}");
+        //if (entered.Contains(other)) //   -> 특정 주소를 알고 있어서 바로 조회됨
+        entered.Add(param.Item1);
     }
 }
